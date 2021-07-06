@@ -1,0 +1,166 @@
+\documentclass[a4j, uplatex, fleqn, dvipdfmx]{jsarticle} % fleqnで数式を左に寄せる,中央揃えにしたい数式は「ceqn環境(nccmath)」に入れればよい
+% \documentclass[a4j, uplatex, twocolumn, fleqn, dvipdfmx]{jsarticle} % fleqnで数式を左に寄せる,中央揃えにしたい数式は「ceqn環境(nccmath)」に入れればよい
+\usepackage[dvipdfmx]{graphicx, color}
+\usepackage{bm} % 太字
+\usepackage{amsmath,amssymb} % 行列など
+\usepackage{here} % 画像を入れたい場所に入れられる
+\usepackage{fancybox,ascmac} % itembox用
+\usepackage{hhline} % 表組の2重線を思い通りにできる
+\usepackage{siunitx} % SI単位系
+\usepackage{subcaption}
+
+\usepackage[dvipdfmx, hidelinks]{hyperref} % hidelinksでリンクに色や枠が付かないようにする
+\usepackage{pxjahyper}
+\hypersetup{% hyperrefオプションリスト
+  setpagesize=false, % 不具合回避
+  bookmarksnumbered=true, % ブックマークに番号を付ける
+  bookmarksopen=true, % pdfのブックマークのツリーをデフォルトで開く(コンパイル環境によっては機能しないらしい)
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=blue,
+  urlcolor=cyan
+}
+
+% きれいな丸囲み数字
+\usepackage{pifont}
+
+%余白は上下30mm、左右20mm
+\setlength{\textheight}{\paperheight}
+\setlength{\topmargin}{4.6truemm}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\textheight}{-60truemm}
+
+\setlength{\textwidth}{\paperwidth}
+\setlength{\oddsidemargin}{-5.4truemm}
+\setlength{\evensidemargin}{-5.4truemm}
+\addtolength{\textwidth}{-40truemm}
+
+\title{\vspace{-1.5cm}タイトル}
+% \title{汎用的学習ゲームプラットフォームの作成}
+\author{宮崎大学 工学研究科 工学専攻 情報\\T2103329 東郷 拓弥}
+% \date{} % タイトルの日付を非表示にする
+\begin{document}
+\maketitle
+
+\section{はじめに}
+
+% 画像
+% \begin{figure}[htbp]
+%   \centering
+%   \includegraphics[width=7cm]{images/XXX.png}
+%   \caption{XXX}
+%   \label{fig:XXX}
+% \end{figure}
+
+% 画像（横に二枚）
+% \begin{figure}[htbp]
+%   \centering
+%   \begin{tabular}{c}
+%     \begin{minipage}{0.45\hsize}
+%       \centering
+%       \includegraphics[width=7cm]{img/XXX.pdf}
+%       \caption{XXX}
+%       \label{fig:XXX}
+%     \end{minipage}
+
+%     \begin{minipage}{0.45\hsize}
+%     \centering
+%     \includegraphics[width=7cm]{img/XXX.pdf}
+%     \caption{XXX}
+%     \label{fig:XXX2}
+%     \end{minipage}
+% \end{tabular}
+% \end{figure}
+
+% 表
+% \begin{table}[htb]
+%   \caption{XXX}
+%   \label{table:XXX}
+%   \centering
+%   \begin{tabular}{crrr}
+%     \hline
+%     画像 & 平均画素値(r) & 平均画素値(g) & 平均画素値(b) \\
+%     \hline \hline
+%     1番目 & 84.557053 & 102.190216 & 107.264511 \\
+%     2番目 & 100.516571 & 126.928757 & 138.014618 \\
+%     \hline
+%   \end{tabular}
+% \end{table}
+
+% 画像 マトリックス状 参考:http://www.yamamo10.jp/~yamamoto/comp/latex/make_doc/insert_fig/index.php
+% \begin{figure}[htbp]
+%   \begin{minipage}[b]{0.32\linewidth}
+%     \centering
+%     \includegraphics[keepaspectratio, scale=0.3]{images/Q3/xor_sig02.png}
+%     \subcaption{$\sigma=0.2$}
+%   \end{minipage}
+%   \begin{minipage}[b]{0.32\linewidth}
+%     \centering
+%     \includegraphics[keepaspectratio, scale=0.3]{images/Q3/xor_sig02.png}
+%     \subcaption{$\sigma=0.3$}
+%   \end{minipage}
+%   \begin{minipage}[b]{0.32\linewidth}
+%     \centering
+%     \includegraphics[keepaspectratio, scale=0.3]{images/Q3/xor_sig05.png}
+%     \subcaption{$\sigma=0.5$}
+%   \end{minipage}
+%   \\
+%   \begin{minipage}[b]{0.32\linewidth}
+%     \centering
+%     \includegraphics[keepaspectratio, scale=0.3]{images/Q3/xor_sig1.png}
+%     \subcaption{$\sigma=1$}
+%   \end{minipage}
+%   \begin{minipage}[b]{0.32\linewidth}
+%     \centering
+%     \includegraphics[keepaspectratio, scale=0.3]{images/Q3/xor_sig2.png}
+%     \subcaption{$\sigma=2$}
+%   \end{minipage}
+%   \begin{minipage}[b]{0.32\linewidth}
+%     \centering
+%     \includegraphics[keepaspectratio, scale=0.3]{images/Q3/xor_sig3.png}
+%     \subcaption{$\sigma=3$}
+%   \end{minipage}
+%   \caption{XOR問題}
+%   \label{fig:q3_xor}
+% \end{figure}
+
+% 画像 表形式
+% \begin{table}[H]
+%   \caption{入力画像1-inp.pgm, 1-tpl.pgmと出力画像}
+%   \begin{tabular}{|c|c|}
+%     \hline 
+%     入力画像 & テンプレート画像
+%     \\ \hline
+%     \begin{minipage}[]{0.49\linewidth}
+%       \centering
+%       \includegraphics[keepaspectratio, scale=0.3]{images/input/1-inp.png}
+%       % \subcaption{1-inp.pgm}
+%     \end{minipage}
+%     &
+%     \begin{minipage}[]{0.49\linewidth}
+%       \centering
+%       \mbox{\raisebox{0mm}{\includegraphics[keepaspectratio, scale=0.3]{images/input/1-tpl.png}}}
+%       % \subcaption{1-tpl.pgm}
+%     \end{minipage}
+%     \\ \hline
+%     \hline
+%     出力画像 & チェック画像
+%     \\ \hline
+%     \begin{minipage}[]{0.49\linewidth}
+%       \centering
+%       \includegraphics[keepaspectratio, scale=0.3]{images/output/1-out.png}
+%       % \subcaption{1-out.pgm}
+%     \end{minipage}
+%     &
+%     \begin{minipage}[]{0.49\linewidth}
+%       \centering
+%       \includegraphics[keepaspectratio, scale=0.3]{images/output/1-chk.png}
+%       % \subcaption{1-chk.pgm}
+%     \end{minipage}
+%     \\ \hline
+%   \end{tabular}
+%   \label{table:1-inp}
+% \end{table}
+
+\end{document}
