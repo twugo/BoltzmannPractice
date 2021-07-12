@@ -63,12 +63,10 @@ $ \bm{x}(0) \rightarrow \bm{x}(1) \rightarrow \bm{x}(2) \rightarrow \bm{x}(3) \r
   p(\bm{x} ; \bm{w}) = c \exp \{-E(\bm{x} ; \bm{w}) / T\}
 \end{equation}
 をもつことが知られている.ここで
-\begin{equation}
-  \begin{aligned}
-    E(\bm{x} ; \bm{w}) &=-\sum_{i<j} w_{i j} x_{i} x_{j} \\
-    &=-\left(w_{01} x_{1}+w_{02} x_{2}+w_{03} x_{3}+w_{12} x_{1} x_{2}+w_{13} x_{1} x_{3}+w_{23} x_{2} x_{3}\right)
-  \end{aligned}
-\end{equation}
+\begin{align}
+  E(\bm{x} ; \bm{w}) &=-\sum_{i<j} w_{i j} x_{i} x_{j} \\
+  &=-\left(w_{01} x_{1}+w_{02} x_{2}+w_{03} x_{3}+w_{12} x_{1} x_{2}+w_{13} x_{1} x_{3}+w_{23} x_{2} x_{3}\right)
+\end{align}
 であり,$c$ は $\sum_{\bm{x}} p(\bm{x}; \bm{w}) = 1$ とするための正規化定数
 \begin{equation}
   c = c(\bm{w}) = \frac{1}{\sum_{\tilde{\bm{x}}} \exp \{-E(\tilde{\bm{x}} ; \bm{w}) / T\}}
@@ -265,12 +263,118 @@ $w_{i j}=\sum_{\bm{x}^{3}, \bm{x}^{6}}\left(2 x_{i}-1\right)\left(2 x_{j}-1\righ
 
 \section{問2}
 \subsection{問題文}
-各状態 $\bm{x}$ が次の表 4 に示す頻度で出現するボルツマン機械を,学習により実現しよう.
+各状態 $\bm{x}$ が次の表 \ref{table:q2} に示す頻度で出現するボルツマン機械を,学習により実現しよう.
+
+% 表４
+\begin{table}[H]
+  \caption{ボルツマン機械の学習.信号 x の出現頻度.}
+  \label{table:q2}
+  \centering
+  \begin{tabular}{|c|c|r|r|}
+    \hline
+     & 状態$\bm{x}$ & 外界(真の分布): $q(\bm{x})$ & 機械が実現する分布 $p(\bm{x}; \{w_{ij}\})$ \\
+    \hline
+    $\bm{x}^{0}$ & (0,0,0) & 0.1 & \\
+    $\bm{x}^{1}$ & (0,0,1) & 0.1 & \\
+    $\bm{x}^{2}$ & (0,1,0) & 0.05 & \\
+    $\bm{x}^{3}$ & (0,1,1) & 0.05 & \\
+    $\bm{x}^{4}$ & (1,0,0) & 0.1 & \\
+    $\bm{x}^{5}$ & (1,0,1) & 0.1 & \\
+    $\bm{x}^{6}$ & (1,1,0) & 0.4 & \\
+    $\bm{x}^{7}$ & (1,1,1) & 0.1 & \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
+\begin{enumerate}[label=(\alph{enumi}), ref=(\alph{enumi})]
+  \item 
+    すべての結合係数を $w_{ij} = 0$ とする(乱数でもよい).
+  \item 
+    表 \ref{table:q2} に示す確率分布 $q(\bm{x})$ にしたがい $\bm{x}$ を 100 個生成する.
+    $x_i$ と $x_j$ が同時に 1 をとる頻度を $f_{ij}$ とせよ.(こんな実験をするのは時間の無駄だと思えば,
+    期待値 $\sum_{\alpha} x_{i} x_{j} p\left(\bm{x}^{\alpha}\right)$ を計算すればよい.
+    $\Rightarrow f_{01} = 0.7, f_{02} = 0.6, f_{03} = 0.35, f_{12} = 0.5, f_{13} = 0.2, f_{23} = 0.15.$
+    ここで,$x_0$ は常に 1 であること($x_0 = 1$),
+    $\bm{x}$ として,$\bm{x} = (x_1, x_2, x_3)$ と,$x_0$ をのぞいて表記していることに注意.
+    ただし信号の次元 $n$ が大きくなると, $2^n$ とおりの状態数を考慮する必要があり,こういう計算はできない.
+    その場合は,実際に信号を生成して統計量を計算するしかない).
+  \item \label{item:q2_c}
+    回路の初期状態を $\bm{x}(0) = (0, 0, 0)$ に設定する.
+  \item \label{item:q2_d} 
+    ランダムに一つの素子を選び,その素子の状態を更新する.
+    これを 100 回繰り返し,素子 $x_i$ と $x_j$ が同時に 1 になった頻度を $g_{ij}$ とする
+    (頻度 $g_{ij}$ は同時に 1 になった回数を 100 で割ったもの. $0 \leqq g_{ij} \leqq 1$).
+  \item
+    結合係数の値を更新する(学習):
+    \begin{align}
+      w_{i j}:=w_{i j}+0.01\left(f_{i j}-g_{i j}\right)
+    \end{align}
+  \item 
+    Kullback-Leibler のダイバージェンス
+    \begin{align}
+      D=\sum_{\bm{x}} q(\bm{x}) \log \frac{q(\bm{x})}{p(\bm{x})}
+    \end{align}
+    を計算する.ここで $p(\bm{x})$ は,実際に回路を自由に走らせて計算してもよいが,
+    素子数 $n$ が小さい場合は,回路のパラメータ \{$w_{ij}$\} から計算できる理論値(式\eqref{eq:stationary_distribution})を用いればよい.
+  \item 
+    \ref{item:q2_d} にもどり繰り返す(繰り返し回数は任意.例えば 10000 回).
+  \item \label{item:q2_h}
+    横軸に学習回数 $t$, 縦軸に Kullback-Leibler のダイバージェンスをプロットした図を描き(曲線が描ける),
+    学習が進むにしたがい $p(\bm{x})$ が $q(\bm{x})$ に近づいていく($D = 0$ に近づく)様子を確認せよ.
+  \item \label{item:q2_i}
+    獲得した $w_{ij}$ の値を列挙せよ.
+  \item \label{item:q2_j}
+    しきい値がない $n = 3$ の回路を考えよう($w_{01} = w_{02} = w_{03} = 0$).
+    このとき同様な実験をおこない(もう一度 \ref{item:q2_c} から実験をする),結果を比較し考察せよ(2本の曲線の位置関係を比較せよ).
+\end{enumerate}
+
+\subsection{回答}
+\subsubsection{\ref{item:q2_h}}
+手順に従ってボルツマン機械の学習を行ったところ、図\ref{fig:q2_h_graph}のようになった。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=12cm]{images/q2_h_graph.png}
+  \caption{Kullback-Leibler}
+  \label{fig:q2_h_graph}
+\end{figure}
+
+
+\subsubsection{\ref{item:q2_i}}
+獲得した$w_{ij}$の値は、以下のようになった。
+
+$w_{01}=0.1633,\quad w_{02}=-0.6983,\quad w_{03}=0.1486,\quad w_{12}=1.9988,\quad w_{13}=-0.2417,\quad w_{23}=-0.7648$
+
+\subsubsection{\ref{item:q2_j}}
+閾値がない回路でボルツマン機械の学習を行ったところ、図\ref{fig:q2_j_graph}のようになった。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=12cm]{images/q2_j_graph.png}
+  \caption{Kullback-Leibler}
+  \label{fig:q2_j_graph}
+\end{figure}
+
+\ref{item:q2_h}と\ref{item:q2_j}で求めた結果を比較できるように、図\ref{fig:q2_j_h_graph}にプロットを行った。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=12cm]{images/q2_j_h_graph.png}
+  \caption{Kullback-Leibler}
+  \label{fig:q2_j_h_graph}
+\end{figure}
+
+図\ref{fig:q2_j_h_graph}から、閾値がある回路は閾値がない回路に比べて最終的にKullback-Leibler のダイバージェンスの値が小さくなった。
+また、最初のダイバージェンスが大きい間は閾値がない回路よりも結果は良かったが、
+ダイバージェンスが0に近づいた時に一時的に学習効率が落ち、ダイバージェンスが閾値がない回路よりも大きくなった。
+
+\section{問3}
+\subsection{問題文}
+しきい値ありの学習済みの回路において 1 番目の素子の値を $x_1 = 1$ と固定し, $x_2$, $x_3$だけ値の更新を許すとしよう.
+このとき,条件付き確率を直接学習したわけではないが,条件付き確率が学習されていることを確かめよ.
 
 % 画像
 % \begin{figure}[htbp]
 %   \centering
-%   \includegraphics[width=7cm]{images/XXX.png}
+%   \includegraphics[width=12cm]{images/XXX.png}
 %   \caption{XXX}
 %   \label{fig:XXX}
 % \end{figure}
